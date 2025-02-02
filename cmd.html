@@ -1,0 +1,228 @@
+<style>
+/* From Uiverse.io by mrhyddenn */
+.container {
+  width: 230px;
+  height: 194px;
+}
+
+.terminal_toolbar {
+  display: flex;
+  height: 30px;
+  align-items: center;
+  padding: 0 8px;
+  box-sizing: border-box;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background: linear-gradient(#504b45 0%, #3c3b37 100%);
+}
+
+.butt {
+  display: flex;
+  align-items: center;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin-right: 5px;
+  font-size: 8px;
+  height: 12px;
+  width: 12px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 100%;
+  background: linear-gradient(#7d7871 0%, #595953 100%);
+  text-shadow: 0px 1px 0px rgba(255,255,255,0.2);
+  box-shadow: 0px 0px 1px 0px #41403A, 0px 1px 1px 0px #474642;
+}
+
+.btn-color {
+  background: #ee411a;
+}
+
+.btn:hover {
+  cursor: pointer;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.butt--exit {
+  background: linear-gradient(#f37458 0%, #de4c12 100%);
+}
+
+.user {
+  color: #d5d0ce;
+  margin-left: 6px;
+  font-size: 14px;
+  line-height: 15px;
+}
+
+.terminal_body {
+  background: rgba(56, 4, 40, 0.9);
+  height: calc(100% - 30px);
+  padding-top: 2px;
+  margin-top: -1px;
+  font-size: 12px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  overflow-y: auto;
+}
+
+.terminal_promt {
+  display: flex;
+  align-items: center;
+  width: auto;
+}
+
+.terminal_promt span {
+  margin-left: 4px;
+}
+
+.terminal_user {
+  color: #7eda28;
+}
+
+.terminal_location {
+  color: #4878c0;
+}
+
+.terminal_bling {
+  color: #dddddd;
+}
+
+.terminal_cursor {
+  display: inline-block;
+  height: 14px;
+  width: 5px;
+  background: #ffffff;
+  animation: curbl 1200ms linear infinite;
+}
+
+@keyframes curbl {
+  0% {
+    background: #ffffff;
+  }
+
+  49% {
+    background: #ffffff;
+  }
+
+  60% {
+    background: transparent;
+  }
+
+  99% {
+    background: transparent;
+  }
+
+  100% {
+    background: #ffffff;
+  }
+}
+
+.terminal_input {
+  border: none;
+  background: transparent;
+  color: #d5d0ce;
+  font-size: 12px;
+  width: 5px;
+  outline: none;
+  padding: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  max-width: calc(100% - 40px);
+  /*display: none;*/
+}
+
+.0px{
+width: 0px;
+height: 0px;
+}
+</style>
+
+<div class="0px">
+<input type="text" id="terminalInput" class="terminal_input" placeholder=" " oninput="updateText()" />
+</div>
+
+<div class="container">
+    <div class="container_terminal"></div>
+    <div class="terminal_toolbar">
+        <div class="butt">
+            <button class="btn btn-color"></button>
+            <button class="btn"></button>
+            <button class="btn"></button>
+        </div>
+        <p class="user">jerry@admin: ~</p>
+    </div>
+    <div class="terminal_body">
+        <div id="terminalOutput"></div>
+        <div class="terminal_promt">
+            <span class="terminal_user">jerry@admin:</span>
+            <span class="terminal_location">~</span>
+            <span class="terminal_bling">$ </span><p> </p>
+            <p id="text1" style="color: #d5d0ce;"></p>
+            <span class="terminal_cursor" id="cursor"></span>
+        </div>
+    </div>
+</div>
+<script>
+function updateText() {
+    document.getElementById("text1").textContent = document.getElementById("terminalInput").value;
+}
+</script>
+<script>
+// Select elements
+const terminalInput = document.getElementById('terminalInput');
+const terminalOutput = document.getElementById('terminalOutput');
+const cursor = document.getElementById('cursor');
+
+// Function to handle commands
+function handleCommand(command) {
+    let output = '';
+    switch (command.toLowerCase()) {
+        case 'cmd':
+            output = "I am not cmd";
+            break;
+        case 'cd':
+            output = "Oh... this terminal has no folders";
+            break;
+        default:
+            output = `Command '${command}' not found`;
+            break;
+    }
+
+    // Append the result below the command in the terminal
+    terminalOutput.innerHTML += `<div class="terminal_bling" >${output}</div>`;
+    terminalOutput.scrollTop = terminalOutput.scrollHeight; // Scroll to the latest command
+}
+
+// Capture input text when user presses Enter
+terminalInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        let inputText = terminalInput.value.trim();
+        if (inputText) {
+            // Display the command entered in white text
+            terminalOutput.innerHTML += `<div class="terminal_promt">
+            <span class="terminal_user">jerry@admin:</span>
+            <span class="terminal_location">~</span>
+            <span class="terminal_bling">$</span><span class="terminal_command" style="color: #d5d0ce;">${inputText}</span></div>`;
+            
+            // Handle command
+            handleCommand(inputText);
+        }
+
+        terminalInput.value = ''; // Clear input after pressing Enter
+    }
+});
+
+// Focus input field on click
+document.querySelector('.terminal_body').addEventListener('click', function() {
+    terminalInput.focus(); // Focus input when clicking on the terminal body
+});
+</script>
